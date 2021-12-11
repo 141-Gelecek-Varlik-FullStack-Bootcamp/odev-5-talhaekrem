@@ -10,7 +10,6 @@ namespace TalhaMarket.DB.Entities.TalhaMarketDbContext
     public partial class TalhaMarketContext : DbContext
     {
         //Scaffold-DbContext "Server=(localdb)\MSSQLLocalDB;Database=TalhaMarket;Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities -ContextDir Entities/TalhaMarketDbContext -Context TalhaMarketContext -Project TalhaMarket.DB -StartupProject TalhaMarket.DB -NoPluralize -Force
-
         public TalhaMarketContext()
         {
         }
@@ -157,6 +156,7 @@ namespace TalhaMarket.DB.Entities.TalhaMarketDbContext
                 entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
 
                 entity.Property(e => e.Name)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("name");
@@ -168,6 +168,7 @@ namespace TalhaMarket.DB.Entities.TalhaMarketDbContext
                     .HasColumnName("password");
 
                 entity.Property(e => e.SurName)
+                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false)
                     .HasColumnName("surName");
