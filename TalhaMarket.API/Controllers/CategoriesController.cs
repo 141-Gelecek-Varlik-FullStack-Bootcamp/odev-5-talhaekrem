@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TalhaMarket.API.Infrastructure;
 using TalhaMarket.Model;
 using TalhaMarket.Model.Categories;
 using TalhaMarket.Service.Category;
@@ -21,33 +22,46 @@ namespace TalhaMarket.API.Controllers
         }
 
         [HttpGet]
-        public List<CategoryModel> GetAll()
+        public General<CategoryListModel> GetAll()
         {
-            return _categoryService.GetAll();
+            General<CategoryListModel> response = new();
+            response = _categoryService.GetAll();
+            return response;
         }
 
         [HttpGet("{id}")]
-        public CategoryModel GetById(int id)
+        public General<CategoryDetailModel> GetById(int id)
         {
-            return _categoryService.GetCategory(id);
+            General<CategoryDetailModel> response = new();
+            response = _categoryService.GetCategory(id);
+            return response;
         }
 
-        [HttpPost("{userId}")]
-        public General<CategoryModel> Insert([FromBody] CategoryModel newCategory, int userId)
+        [HttpPost]
+        [ServiceFilter(typeof(LoginFilter))]
+        public General<CategoryDetailModel> Insert([FromBody] CategoryListModel newCategory)
         {
-            return _categoryService.Insert(newCategory, userId);
+            General<CategoryDetailModel> response = new();
+            response = _categoryService.Insert(newCategory);
+            return response;
         }
 
-        [HttpPut("{id}/{userId}")]
-        public General<CategoryModel> UpdateCategory(int id, [FromBody] CategoryModel updateCategory, int userId)
+        [HttpPut("{id}")]
+        [ServiceFilter(typeof(LoginFilter))]
+        public General<CategoryDetailModel> UpdateCategory(int id, [FromBody] UpdateCategoryModel updateCategory)
         {
-            return _categoryService.Update(id, updateCategory, userId);
+            General<CategoryDetailModel> response = new();
+            response = _categoryService.Update(id, updateCategory);
+            return response;
         }
+
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [ServiceFilter(typeof(LoginFilter))]
+        public General<bool> Delete(int id)
         {
-            _categoryService.Delete(id);
-            return Ok();
+            General<bool> response = new();
+            response = _categoryService.Delete(id);
+            return response;
         }
     }
 }

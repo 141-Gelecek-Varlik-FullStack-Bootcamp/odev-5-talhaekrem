@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-#nullable disable
-
-namespace TalhaMarket.DB.Entities
+namespace TalhaMarket.Model.Products
 {
-    public partial class Product
+    public class UpdateProductModel
     {
         public int Id { get; set; }
         public int CategoryId { get; set; }
@@ -16,12 +17,5 @@ namespace TalhaMarket.DB.Entities
         public int Stock { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
-        public int InsertedUser { get; set; }
-        public DateTime InsertDate { get; set; }
-        public int? UpdatedUser { get; set; }
-        public DateTime? UpdateDate { get; set; }
-
-        public virtual Category Category { get; set; }
-        public virtual User InsertedUserNavigation { get; set; }
     }
 }

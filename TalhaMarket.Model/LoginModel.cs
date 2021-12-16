@@ -8,6 +8,7 @@ namespace TalhaMarket.Model
 {
     public class LoginModel
     {
+        //login işlemi için kullanıcının doldurup göndereceği model.
         public string userName { get; set; }
         public string password { get; set; }
     }

@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using TalhaMarket.API.Infrastructure;
 using TalhaMarket.Service.Category;
+using TalhaMarket.Service.CurrentUser;
+using TalhaMarket.Service.Pagination;
 using TalhaMarket.Service.Product;
 using TalhaMarket.Service.User;
 namespace TalhaMarket.API
@@ -29,12 +31,19 @@ namespace TalhaMarket.API
             //mapperý inject ediyoruz.
             services.AddSingleton(mapper);
 
-            //user service injecti
-            services.AddScoped<IUserService,UserService>();
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IProductService, ProductService>();
+            //injection kýsýmlarý
+            services.AddTransient<IUserService,UserService>();
+            services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IPaginationService, PaginationManager>();
+
+            services.AddScoped<LoginFilter>();
+            services.AddSingleton<ICurrentUserService, CurrentUserManager>();
+
 
             services.AddControllers();
+            //cache yapýsý
+            services.AddMemoryCache();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "TalhaMarket.API", Version = "v1" });

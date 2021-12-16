@@ -14,16 +14,33 @@ namespace TalhaMarket.API.Infrastructure
     {
         public MappingProfile()
         {
-            //usermodeli-> usera
-            //userı da-> usermodele mapliyoruz.
+            //api katmanı için map işlemleri
+            //user
+            CreateMap<UserDetailModel, User>();
+            CreateMap<User, UserDetailModel>();
             CreateMap<UserModel, User>();
             CreateMap<User, UserModel>();
+            CreateMap<UpdateUserModel, User>();
 
-            CreateMap<CategoryModel, Category>();
-            CreateMap<Category, CategoryModel>();
 
-            CreateMap<ProductModel, Product>();
-            CreateMap<Product, ProductModel>();
+            //product
+            //get all
+            CreateMap<Product, ListProductModel>();
+            //get by id
+            CreateMap<Product, ProductDetailModel>();
+            CreateMap<ProductDetailModel, Product>();
+            //insert
+            CreateMap<InsertProductModel, Product>();
+            //update
+            CreateMap<UpdateProductModel, Product>();
+
+            //category
+            CreateMap<Category, CategoryListModel>();
+            CreateMap<Category, CategoryDetailModel>();
+            CreateMap<CategoryDetailModel, Category>();
+            CreateMap<CategoryListModel, Category>();
+            CreateMap<UpdateCategoryModel, Category>();
+
         }
     }
 }

@@ -8,8 +8,11 @@ namespace TalhaMarket.Model
 {
     public class General<T>
     {
-        //servisten dönen her işlemin ortak mesaj alanı başarılı mı ve gelen veri
+        //servisten dönen her işlemin ortak mesaj alanı. başarılı mı?, gelen veri, liste halinde gelen veri, durum mesajı
         public bool isSuccess { get; set; }
         public T Entity { get; set; }
+        public List<T> EntityList { get; set; }
+
+        public string Message { get; set; }
     }
 }

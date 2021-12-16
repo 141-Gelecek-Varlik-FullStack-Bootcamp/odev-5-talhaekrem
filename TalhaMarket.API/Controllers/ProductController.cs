@@ -1,9 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
+using TalhaMarket.API.Infrastructure;
 using TalhaMarket.Model;
 using TalhaMarket.Model.Products;
 using TalhaMarket.Service.Product;
@@ -19,34 +15,52 @@ namespace TalhaMarket.API.Controllers
         {
             _productService = productService;
         }
+        //Tüm ürünleri getir
         [HttpGet]
-        public List<ProductModel> GetAll()
+        public General<ListProductModel> GetAll()
         {
-            return _productService.GetAll();
+            General<ListProductModel> response = new();
+            response = _productService.GetAll();
+            return response;
         }
+        //idye göre ürün getir
 
         [HttpGet("{id}")]
-        public ProductModel GetById(int id)
+        public General<ProductDetailModel> GetById(int id)
         {
-            return _productService.GetProduct(id);
+            General<ProductDetailModel> response = new();
+            response = _productService.GetProduct(id);
+            return response;
         }
 
-        [HttpPost("{userId}")]
-        public General<ProductModel> Insert([FromBody] ProductModel newProduct, int userId)
+        //ürün ekle
+        [HttpPost]
+        [ServiceFilter(typeof(LoginFilter))]
+        public General<ProductDetailModel> Insert([FromBody] InsertProductModel newProduct)
         {
-            return _productService.Insert(newProduct, userId);
+            General<ProductDetailModel> response = new();
+            response = _productService.Insert(newProduct);
+            return response;
         }
 
-        [HttpPut("{id}/{userId}")]
-        public General<ProductModel> UpdateProduct(int id, [FromBody] ProductModel updateProduct, int userId)
+        //ürün güncelle
+        [HttpPut("{id}")]
+        [ServiceFilter(typeof(LoginFilter))]
+        public General<ProductDetailModel> UpdateProduct(int id, [FromBody] UpdateProductModel updateProduct)
         {
-            return _productService.Update(id, updateProduct, userId);
+            General<ProductDetailModel> response = new();
+            response = _productService.Update(id, updateProduct);
+            return response;
         }
+
+        //ürün sil
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        [ServiceFilter(typeof(LoginFilter))]
+        public General<bool> Delete(int id)
         {
-            _productService.Delete(id);
-            return Ok();
+            General<bool> response = new();
+            response = _productService.Delete(id);
+            return response;
         }
     }
 }

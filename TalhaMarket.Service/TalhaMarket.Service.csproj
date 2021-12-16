@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TalhaMarket.Core\TalhaMarket.Core.csproj" />
     <ProjectReference Include="..\TalhaMarket.DB\TalhaMarket.DB.csproj" />
     <ProjectReference Include="..\TalhaMarket.Model\TalhaMarket.Model.csproj" />
   </ItemGroup>
