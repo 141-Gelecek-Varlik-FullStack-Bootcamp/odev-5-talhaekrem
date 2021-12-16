@@ -21,7 +21,7 @@ namespace TalhaMarket.API.Controllers
 
         //from query olarak istek atınız. Task4/Page?pageSize=10&pageNumber=2 gibi
         [HttpGet("Page")]
-        public Pagination<ListProductModel> GetPage([FromQuery] int pageSize, [FromQuery] int pageNumber)
+        public Pagination<ListProductModel> GetPage(int pageSize, int pageNumber)
         {
             Pagination<ListProductModel> response = new();
             response = _pagination.GetPage(pageSize, pageNumber);
@@ -29,7 +29,7 @@ namespace TalhaMarket.API.Controllers
         }
         //from query olarak istek atınız. Task4/Sort?sortName=DisplayName&type=False gibi //type false ise çoktan aza, true azdan çoka
         [HttpGet("Sort")]
-        public FilterSort<ListProductModel> Sorting([FromQuery]  string sortName, [FromQuery] bool type)
+        public FilterSort<ListProductModel> Sorting(string sortName, bool type)
         {
             FilterSort<ListProductModel> response = new();
             response = _pagination.Sorting(sortName, type);
@@ -41,8 +41,19 @@ namespace TalhaMarket.API.Controllers
         public FilterSort<ListProductModel> Filter(string filterName, filterEnum type, string filterItem)
         {
             FilterSort<ListProductModel> response = new();
-            response = _pagination.Filter(filterName, type,filterItem);
+            response = _pagination.Filter(filterName, type, filterItem);
             return response;
         }
+
+        //from query olarak istek atınız Task4/Products?filterName=Price&type=0&filterItem=1000&sortName=Stock&sortType=True&pageSize=5&pageNumber=2 gibi
+        //Fiyatı 1000 liranın üstünde olan ürünleri Stockuna göre artan şeklinde sırala. Her sayfada 5 ürün olsun ve 2. sayfayı getir.
+        [HttpGet("Products")]
+        public Pagination<ListProductModel> FilterSortPaging(string filterName, filterEnum type, string filterItem, string sortName, bool sortType, int pageSize, int pageNumber)
+        {
+            Pagination<ListProductModel> response = new();
+            response = _pagination.FilterSortPaging(filterName, type, filterItem, sortName, sortType, pageSize, pageNumber);
+            return response;
+        }
+
     }
 }
