@@ -24,8 +24,8 @@ namespace TalhaMarket.API.Infrastructure
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            int currentUserId = _currentUser.GetCurrentUser().Id;
-            if (!_memoryCache.TryGetValue($"Login:{currentUserId}", out UserModel response))
+            //int currentUserId = _currentUser.GetCurrentUser().Id;
+            if (!_memoryCache.TryGetValue("Login", out UserModel response))
             {
                 context.Result = new UnauthorizedObjectResult("Giriş yapmanız gerekmektedir.");
             }

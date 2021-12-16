@@ -13,7 +13,6 @@ using TalhaMarket.Service.User;
 
 namespace TalhaMarket.API.Controllers
 {
-    [Route("[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
     {
@@ -29,6 +28,7 @@ namespace TalhaMarket.API.Controllers
         }
 
         [HttpPost]
+        [Route("[controller]")]
         public General<bool> Login([FromBody] LoginModel loginUser)
         {
             General<bool> resp = new();
@@ -37,14 +37,14 @@ namespace TalhaMarket.API.Controllers
             if (model.isSuccess)
             {
                 //username password doğruysa ve login olmuşsa kullanıcıyı cachememorye yaz :{model.Entity.Id}
-                if (!_memoryCache.TryGetValue($"Login:{model.Entity.Id}", out UserModel _loginUser))
+                if (!_memoryCache.TryGetValue("Login", out UserModel _loginUser))
                 {
                     var cacheOptions = new MemoryCacheEntryOptions()
                     {
                         AbsoluteExpiration = DateTime.Now.AddHours(3)
                     };
-                    _memoryCache.Set($"Login:{model.Entity.Id}", model.Entity, cacheOptions);
-                    _currentUser.SetCurrentUser(model.Entity);
+                    _memoryCache.Set("Login", model.Entity, cacheOptions);
+                    //_currentUser.SetCurrentUser(model.Entity);
                     resp.Entity = true;
                     resp.isSuccess = true;
                     resp.Message = "Giriş başarılı.";
@@ -60,6 +60,21 @@ namespace TalhaMarket.API.Controllers
                 resp.Message = "Kullanıcı adı veya şifre yanlış.";
             }
             return resp;
+        }
+
+        [HttpPost]
+        [Route("Logout")]
+        public ActionResult LogOut()
+        {
+            if(_memoryCache.TryGetValue("Login",out UserModel model))
+            {
+                 _memoryCache.Remove("Login");
+                return new OkObjectResult("Çıkış başarılı");
+            }
+            else
+            {
+                return new BadRequestObjectResult("Oturum zaten açık değil");
+            }
         }
     }
 }

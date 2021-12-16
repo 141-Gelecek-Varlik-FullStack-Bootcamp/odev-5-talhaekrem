@@ -38,7 +38,7 @@ namespace TalhaMarket.API
             services.AddTransient<IPaginationService, PaginationManager>();
 
             services.AddScoped<LoginFilter>();
-            services.AddSingleton<ICurrentUserService, CurrentUserManager>();
+            services.AddScoped<ICurrentUserService, CurrentUserManager>();
 
 
             services.AddControllers();

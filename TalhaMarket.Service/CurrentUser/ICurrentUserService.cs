@@ -10,6 +10,6 @@ namespace TalhaMarket.Service.CurrentUser
     public interface ICurrentUserService
     {
         UserModel GetCurrentUser();
-        void SetCurrentUser(UserModel user);
+        //void SetCurrentUser(UserModel user);
     }
 }
