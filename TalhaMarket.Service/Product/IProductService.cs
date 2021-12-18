@@ -7,8 +7,8 @@ namespace TalhaMarket.Service.Product
     {
         General<ListProductModel> GetAll();
         General<ProductDetailModel> GetProduct(int id);
-        General<ProductDetailModel> Insert(InsertProductModel newProduct);
-        General<ProductDetailModel> Update(int id, UpdateProductModel updateProduct);
+        General<ProductDetailModel> Insert(UpdateProductModel newProduct);
+        General<ProductDetailModel> Update(UpdateProductModel updateProduct);
         General<bool> Delete(int id);
     }
 }

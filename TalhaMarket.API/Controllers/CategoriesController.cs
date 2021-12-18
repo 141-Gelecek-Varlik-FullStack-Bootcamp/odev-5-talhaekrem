@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TalhaMarket.API.Infrastructure;
+using TalhaMarket.API.Services.CurrentUser;
 using TalhaMarket.Model;
 using TalhaMarket.Model.Categories;
 using TalhaMarket.Service.Category;
@@ -16,9 +17,11 @@ namespace TalhaMarket.API.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
-        public CategoriesController(ICategoryService categoryService)
+        private readonly ICurrentUserService _currentUser;
+        public CategoriesController(ICategoryService categoryService, ICurrentUserService currentUserService)
         {
             _categoryService = categoryService;
+            _currentUser = currentUserService;
         }
 
         [HttpGet]
@@ -39,19 +42,19 @@ namespace TalhaMarket.API.Controllers
 
         [HttpPost]
         [ServiceFilter(typeof(LoginFilter))]
-        public General<CategoryDetailModel> Insert([FromBody] CategoryListModel newCategory)
+        public General<CategoryDetailModel> InsertUpdateCategory([FromBody] UpdateCategoryModel category)
         {
             General<CategoryDetailModel> response = new();
-            response = _categoryService.Insert(newCategory);
-            return response;
-        }
-
-        [HttpPut("{id}")]
-        [ServiceFilter(typeof(LoginFilter))]
-        public General<CategoryDetailModel> UpdateCategory(int id, [FromBody] UpdateCategoryModel updateCategory)
-        {
-            General<CategoryDetailModel> response = new();
-            response = _categoryService.Update(id, updateCategory);
+            if (category is { Id: > 0 })
+            {
+                category.UpdatedUser = _currentUser.GetCurrentUser().Id;
+                response = _categoryService.Update(category);
+            }
+            else
+            {
+                category.InsertedUser = _currentUser.GetCurrentUser().Id;
+                response = _categoryService.Insert(category);
+            }
             return response;
         }
 

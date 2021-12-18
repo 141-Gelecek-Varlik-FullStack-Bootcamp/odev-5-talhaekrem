@@ -7,8 +7,8 @@ namespace TalhaMarket.Service.Category
     {
         General<CategoryListModel> GetAll();
         General<CategoryDetailModel> GetCategory(int id);
-        General<CategoryDetailModel> Insert(CategoryListModel newCategory);
-        General<CategoryDetailModel> Update(int id, UpdateCategoryModel updateCategory);
+        General<CategoryDetailModel> Insert(UpdateCategoryModel newCategory);
+        General<CategoryDetailModel> Update(UpdateCategoryModel updateCategory);
         General<bool> Delete(int id);
     }
 }

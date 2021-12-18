@@ -84,7 +84,7 @@ namespace TalhaMarket.Service.User
         }
 
         //kullanıcı kayıt olma
-        public General<UserDetailModel> Insert(UserModel newUser)
+        public General<UserDetailModel> Insert(UpdateUserModel newUser)
         {
             var result = new General<UserDetailModel>() { isSuccess = false };
 
@@ -110,13 +110,13 @@ namespace TalhaMarket.Service.User
         }
 
         //kullanıcı bilgilerini güncelle
-        public General<UserDetailModel> Update(int id, UpdateUserModel updateUser)
+        public General<UserDetailModel> Update(UpdateUserModel updateUser)
         {
             var result = new General<UserDetailModel>() { isSuccess = false };
             var model = _mapper.Map<TalhaMarket.DB.Entities.User>(updateUser);
             using (var _context = new TalhaMarketContext())
             {
-                var user = _context.User.SingleOrDefault(u => u.Id == id);
+                var user = _context.User.SingleOrDefault(u => u.Id == updateUser.Id);
                 user.Name = model.Name;
                 user.SurName = model.SurName;
                 user.UserName = model.UserName;

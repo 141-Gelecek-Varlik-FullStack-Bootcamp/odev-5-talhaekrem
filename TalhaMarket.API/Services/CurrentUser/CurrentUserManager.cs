@@ -2,11 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TalhaMarket.Model.Users;
 
-namespace TalhaMarket.Service.CurrentUser
+namespace TalhaMarket.API.Services.CurrentUser
 {
     public class CurrentUserManager : ICurrentUserService
     {
@@ -41,6 +40,5 @@ namespace TalhaMarket.Service.CurrentUser
         //{
         //    currentUser = user;
         //}
-
     }
 }

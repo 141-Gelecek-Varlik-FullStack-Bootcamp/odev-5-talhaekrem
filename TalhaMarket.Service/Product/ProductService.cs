@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 using TalhaMarket.DB.Entities.TalhaMarketDbContext;
 using TalhaMarket.Model;
 using TalhaMarket.Model.Products;
-using TalhaMarket.Service.CurrentUser;
 
 namespace TalhaMarket.Service.Product
 {
     public class ProductService : IProductService
     {
         private readonly IMapper _mapper;
-        private readonly ICurrentUserService _currentUser;
-        public ProductService(IMapper mapper, ICurrentUserService currentUserService)
+        public ProductService(IMapper mapper)
         {
             _mapper = mapper;
-            _currentUser = currentUserService;
         }
 
         //Ürüne ait CRUD işlemlerinin yapıldığı bölüm. _context ve linq işlemleriyle veritabanıyla ilişki kurulur.
@@ -66,15 +63,14 @@ namespace TalhaMarket.Service.Product
         }
 
         //ürün ekle
-        public General<ProductDetailModel> Insert(InsertProductModel newProduct)
+        public General<ProductDetailModel> Insert(UpdateProductModel newProduct)
         {
             var result = new General<ProductDetailModel>() { isSuccess = false };
-            int currentUserId = _currentUser.GetCurrentUser().Id;
             var model = _mapper.Map<TalhaMarket.DB.Entities.Product>(newProduct);
             using (var _context = new TalhaMarketContext())
             {
                 model.InsertDate = DateTime.Now;
-                model.InsertedUser = currentUserId;
+                model.InsertedUser = newProduct.InsertedUser;
                 _context.Product.Add(model);
                 _context.SaveChanges();
                 result.Entity = _mapper.Map<ProductDetailModel>(model);
@@ -94,14 +90,13 @@ namespace TalhaMarket.Service.Product
         }
 
         //ürün güncelle
-        public General<ProductDetailModel> Update(int id, UpdateProductModel updateProduct)
+        public General<ProductDetailModel> Update(UpdateProductModel updateProduct)
         {
             var result = new General<ProductDetailModel>() { isSuccess = false };
-            int currentUserId = _currentUser.GetCurrentUser().Id;
             var model = _mapper.Map<TalhaMarket.DB.Entities.Product>(updateProduct);
             using (var _context = new TalhaMarketContext())
             {
-                var product = _context.Product.SingleOrDefault(u => u.Id == id);
+                var product = _context.Product.SingleOrDefault(u => u.Id == updateProduct.Id);
                 product.CategoryId = model.CategoryId;
                 product.Name = model.Name;
                 product.DisplayName = model.DisplayName;
@@ -111,7 +106,7 @@ namespace TalhaMarket.Service.Product
                 product.IsActive = model.IsActive;
                 product.IsDeleted = model.IsDeleted;
                 product.UpdateDate = DateTime.Now;
-                product.UpdatedUser = currentUserId;
+                product.UpdatedUser = updateProduct.UpdatedUser;
                 _context.SaveChanges();
                 result.isSuccess = true;
                 result.Entity = _mapper.Map<ProductDetailModel>(product);

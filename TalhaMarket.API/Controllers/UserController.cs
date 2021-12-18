@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using TalhaMarket.API.Infrastructure;
 using TalhaMarket.Model;
 using TalhaMarket.Model.Users;
-using TalhaMarket.Service.CurrentUser;
 using TalhaMarket.Service.User;
 
 namespace TalhaMarket.API.Controllers
@@ -40,20 +39,18 @@ namespace TalhaMarket.API.Controllers
             return response;
         }
 
-        //kullanıcı ekle
         [HttpPost]
-        public General<UserDetailModel> Insert([FromBody] UserModel newUser)
+        public General<UserDetailModel> InsertUpdateUser([FromBody] UpdateUserModel user)
         {
             General<UserDetailModel> response = new();
-            response = _userService.Insert(newUser);
-            return response;
-        }
-
-        [HttpPut("{id}")]
-        public General<UserDetailModel> UpdateUser(int id, [FromBody] UpdateUserModel updateUser)
-        {
-            General<UserDetailModel> response = new();
-            response = _userService.Update(id, updateUser);
+            if(user is { Id: > 0 })
+            {
+                response = _userService.Update(user);
+            }
+            else
+            {
+                response = _userService.Insert(user);
+            }
             return response;
         }
 

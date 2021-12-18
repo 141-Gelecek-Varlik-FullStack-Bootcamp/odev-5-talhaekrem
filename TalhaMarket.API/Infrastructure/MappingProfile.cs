@@ -29,8 +29,6 @@ namespace TalhaMarket.API.Infrastructure
             //get by id
             CreateMap<Product, ProductDetailModel>();
             CreateMap<ProductDetailModel, Product>();
-            //insert
-            CreateMap<InsertProductModel, Product>();
             //update
             CreateMap<UpdateProductModel, Product>();
 

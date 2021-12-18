@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 using TalhaMarket.DB.Entities.TalhaMarketDbContext;
 using TalhaMarket.Model;
 using TalhaMarket.Model.Categories;
-using TalhaMarket.Service.CurrentUser;
 
 namespace TalhaMarket.Service.Category
 {
     public class CategoryService : ICategoryService
     {
         private readonly IMapper _mapper;
-        private readonly ICurrentUserService _currentUser;
-        public CategoryService(IMapper mapper, ICurrentUserService currentUserService)
+        public CategoryService(IMapper mapper)
         {
             _mapper = mapper;
-            _currentUser = currentUserService;
         }
         //kategoriye ait CRUD işlemlerinin yapıldığı bölüm. _context ve linq işlemleriyle veritabanıyla ilişki kurulur.
         public General<CategoryListModel> GetAll()
@@ -62,15 +59,14 @@ namespace TalhaMarket.Service.Category
             return result;
         }
 
-        public General<CategoryDetailModel> Insert(CategoryListModel newCategory)
+        public General<CategoryDetailModel> Insert(UpdateCategoryModel newCategory)
         {
             var result = new General<CategoryDetailModel>() { isSuccess = false };
-            int currentUserId = _currentUser.GetCurrentUser().Id;
             var model = _mapper.Map<TalhaMarket.DB.Entities.Category>(newCategory);
             using (var _context = new TalhaMarketContext())
             {
                 model.InsertDate = DateTime.Now;
-                model.InsertedUser = currentUserId;
+                model.InsertedUser = newCategory.InsertedUser;
                 model.IsActive = true;
                 _context.Category.Add(model);
                 _context.SaveChanges();
@@ -89,20 +85,19 @@ namespace TalhaMarket.Service.Category
             return result;
         }
 
-        public General<CategoryDetailModel> Update(int id, UpdateCategoryModel updateCategory)
+        public General<CategoryDetailModel> Update(UpdateCategoryModel updateCategory)
         {
             var result = new General<CategoryDetailModel>() { isSuccess = false };
-            int currentUserId = _currentUser.GetCurrentUser().Id;
             var model = _mapper.Map<TalhaMarket.DB.Entities.Category>(updateCategory);
             using (var _context = new TalhaMarketContext())
             {
-                var category = _context.Category.SingleOrDefault(u => u.Id == id);
+                var category = _context.Category.SingleOrDefault(u => u.Id == updateCategory.Id);
                 category.Name = model.Name;
                 category.DisplayName = model.DisplayName;
                 category.IsActive = model.IsActive;
                 category.IsDeleted = model.IsDeleted;
                 category.UpdateDate = DateTime.Now;
-                category.UpdatedUser = currentUserId;
+                category.UpdatedUser = updateCategory.UpdatedUser;
                 _context.SaveChanges();
                 result.isSuccess = true;
                 result.Entity = _mapper.Map<CategoryDetailModel>(category);

@@ -13,5 +13,7 @@ namespace TalhaMarket.Model.Categories
         public string DisplayName { get; set; }
         public bool IsActive { get; set; }
         public bool IsDeleted { get; set; }
+        public int InsertedUser { get; set; }
+        public int? UpdatedUser { get; set; }
     }
 }

@@ -22,56 +22,72 @@ namespace TalhaMarket.Service.Pagination
         }
 
         //sayfalama
+        //eğer pageNumber girilmemişse default olarak 1. sayfayı gösteriyorum
         public Pagination<ListProductModel> GetPage(int pageSize, int pageNumber)
         {
             var result = new Pagination<ListProductModel>() { isSuccess = false };
-            result.pageNumber = pageNumber;
             result.operations = new();
             result.exeptionMessage = new();
+            if (pageNumber == 0)
+            {
+                pageNumber = 1;
+                result.exeptionMessage.Add("Sayfa sayısı girilmediğinden ilk sayfa gösterilecektir");
+            }
+            result.pageNumber = pageNumber;
+
             using (var _context = new TalhaMarketContext())
             {
                 result.totalEntityCount = _context.Product.Count();
-                if (pageSize < 1 || pageSize > result.totalEntityCount)
+                if (pageSize > result.totalEntityCount || pageSize < 1)
                 {
-                    result.exeptionMessage.Add(String.Format(
-                        "Lütfen sayfada görünecek ürün miktarını 1 ile {0} arasında girin."
-                        , result.totalEntityCount));
-                }
-                else
-                {
-                    /*bu kısımda ise toplam sayfa sayısını alıyorum. toplam ürün sayısını sayfa genişliğine bölüp bunu yukarı yuvarlıyorum.
-                    yukarı yuvarlamamın sebebi bölme işlemi virgüllü çıkabilir. ürün dışarda kalmaması içindir. bu duruma örnek vermek gerekirsek 
-                    25 ürün var ve her sayfada 10 ürün var ise toplam 3 sayfa olur. ilk 2 sayfada dolu halde 10 ar ürün, 3. sayfada ise 5 ürün olur
-                    bölüm işlemi 2,5 çıkar. bunu yukarı yuvarlarız ki 3. sayfanın da olduğunu belirtmek için. 3. sayfa full dolu değil ama 
-                    yarım da olsa sayfa sayfadır. Ceiling işlemi yukarı yuvarlamadır.*/
-                    result.totalPageCount = (int)Math.Ceiling(result.totalEntityCount / (double)pageSize);
-
-                    if (pageNumber > result.totalPageCount || pageNumber < 1)
+                    if (pageSize < 1)
                     {
-                        if (pageNumber < 1)
-                        {
-                            result.exeptionMessage.Add(String.Format(
-                                "Toplam sayfa sayısı {0}. {1} nolu sayfa olmadığından ilk sayfa gösterilecektir",
-                                result.totalPageCount, pageNumber));
-                            pageNumber = 1;
-                        }
-                        else
-                        {
-                            result.exeptionMessage.Add(String.Format(
-                                "Toplam sayfa sayısı {0}. {1} nolu sayfa olmadığından son sayfa gösterilecektir",
-                                result.totalPageCount, pageNumber));
-                            pageNumber = result.totalPageCount;
-                        }
+                        result.exeptionMessage.Add(String.Format(
+                            "Minimum sayfa genişliği 1 olmalıdır.{0} miktarı geçersiz olduğundan her sayfada 1 ürün gösterilecektir.",
+                            pageSize));
+                        pageSize = 1;
                     }
-                    /*buradaki işlem şöyledir: Skip() ile belirtilen miktardaki ürün atlanır. Take() ile belirtilen ürün kadar alınır
-                    sayfa 1 i görüntülemek isteyen kişi hiç sayfa atlamaz. sayfa 3 ü görüntülemek isterseniz 2 sayfa atlarsınız. yani 
-                    pageNumber-1. peki kaç ürün atlayacaksınız? pagesize kadar sayfadaki ürünleri atlayacaksınız. sonuç olarak 
-                    Skip(pageNumber-1)*pageSize. peki sonra kaç ürün alacaksınız? sayfa genişliği kadar. Take(pageSize);*/
-                    var products = _context.Product.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-                    List<ListProductModel> productList = _mapper.Map<List<TalhaMarket.DB.Entities.Product>, List<ListProductModel>>(products);
-                    result.entities = productList;
-                    result.operations.Add(String.Format("Sayfalama: Sayfadaki Toplam Ürün {0}, Sayfa Sayısı {1}", products.Count, pageNumber));
+                    else
+                    {
+                        result.exeptionMessage.Add(String.Format(
+                            "Maksimum sayfa genişliği {0} olmalıdır. {1} miktarı geçersiz olduğundan sayfada {2} ürün gösterilecektir."
+                            , result.totalEntityCount, pageSize, result.totalEntityCount));
+                        pageSize = result.totalEntityCount;
+                    }
                 }
+
+                /*bu kısımda ise toplam sayfa sayısını alıyorum. toplam ürün sayısını sayfa genişliğine bölüp bunu yukarı yuvarlıyorum.
+                yukarı yuvarlamamın sebebi bölme işlemi virgüllü çıkabilir. ürün dışarda kalmaması içindir. bu duruma örnek vermek gerekirsek 
+                25 ürün var ve her sayfada 10 ürün var ise toplam 3 sayfa olur. ilk 2 sayfada dolu halde 10 ar ürün, 3. sayfada ise 5 ürün olur
+                bölüm işlemi 2,5 çıkar. bunu yukarı yuvarlarız ki 3. sayfanın da olduğunu belirtmek için. 3. sayfa full dolu değil ama 
+                yarım da olsa sayfa sayfadır. Ceiling işlemi yukarı yuvarlamadır.*/
+                result.totalPageCount = (int)Math.Ceiling(result.totalEntityCount / (double)pageSize);
+
+                if (pageNumber > result.totalPageCount || pageNumber < 1)
+                {
+                    if (pageNumber < 1)
+                    {
+                        result.exeptionMessage.Add(String.Format(
+                            "{0} sayfa numarası geçersiz olduğundan ilk sayfa gösterilecektir", pageNumber));
+                        pageNumber = 1;
+                    }
+                    else
+                    {
+                        result.exeptionMessage.Add(String.Format(
+                            "Toplam sayfa sayısı {0}. {1} nolu sayfa olmadığından son sayfa gösterilecektir",
+                            result.totalPageCount, pageNumber));
+                        pageNumber = result.totalPageCount;
+                    }
+                }
+                /*buradaki işlem şöyledir: Skip() ile belirtilen miktardaki ürün atlanır. Take() ile belirtilen ürün kadar alınır
+                sayfa 1 i görüntülemek isteyen kişi hiç sayfa atlamaz. sayfa 3 ü görüntülemek isterseniz 2 sayfa atlarsınız. yani 
+                pageNumber-1. peki kaç ürün atlayacaksınız? pagesize kadar sayfadaki ürünleri atlayacaksınız. sonuç olarak 
+                Skip(pageNumber-1)*pageSize. peki sonra kaç ürün alacaksınız? sayfa genişliği kadar. Take(pageSize);*/
+                var products = _context.Product.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+                List<ListProductModel> productList = _mapper.Map<List<TalhaMarket.DB.Entities.Product>, List<ListProductModel>>(products);
+                result.entities = productList;
+                result.operations.Add(String.Format("Sayfalama: Sayfadaki Toplam Ürün {0}, Sayfa Sayısı {1}", products.Count, pageNumber));
+
             }
             if (result.entities.Count > 0)
             {
@@ -204,6 +220,11 @@ namespace TalhaMarket.Service.Pagination
             var result = new Pagination<ListProductModel>() { isSuccess = false };
             result.operations = new();
             result.exeptionMessage = new();
+            if (pageNumber == 0)
+            {
+                pageNumber = 1;
+                result.exeptionMessage.Add("Sayfa sayısı girilmediğinden ilk sayfa gösterilecektir");
+            }
             using (var _context = new TalhaMarketContext())
             {
                 var products = _context.Product.Take(0).ToList();
@@ -273,37 +294,48 @@ namespace TalhaMarket.Service.Pagination
 
                 //pagination
                 result.totalEntityCount = products.Count;
-                if (pageSize < 1 || pageSize > result.totalEntityCount)
+                if (pageSize > result.totalEntityCount || pageSize < 1)
                 {
-                    result.exeptionMessage.Add(String.Format(
-                        "Lütfen sayfada görünecek ürün miktarını 1 ile {0} arasında girin."
-                        , result.totalEntityCount));
-                }
-                else
-                {
-                    result.totalPageCount = (int)Math.Ceiling(result.totalEntityCount / (double)pageSize);
-                    if (pageNumber > result.totalPageCount || pageNumber < 1)
+                    if (pageSize < 1)
                     {
-                        if (pageNumber < 1)
-                        {
-                            result.exeptionMessage.Add(String.Format(
-                                "Toplam sayfa sayısı {0}. {1} nolu sayfa olmadığından ilk sayfa gösterilecektir",
-                                result.totalPageCount, pageNumber));
-                            pageNumber = 1;
-                        }
-                        else
-                        {
-                            result.exeptionMessage.Add(String.Format(
-                                "Toplam sayfa sayısı {0}. {1} nolu sayfa olmadığından son sayfa gösterilecektir",
-                                result.totalPageCount, pageNumber));
-                            pageNumber = result.totalPageCount;
-                        }
+                        result.exeptionMessage.Add(String.Format(
+                            "Minimum sayfa genişliği 1 olmalıdır.{0} miktarı geçersiz olduğundan her sayfada 1 ürün gösterilecektir.",
+                            pageSize));
+                        pageSize = 1;
                     }
-                    products = products.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
-                    List<ListProductModel> productList = _mapper.Map<List<TalhaMarket.DB.Entities.Product>, List<ListProductModel>>(products);
-                    result.entities = productList;
-                    result.operations.Add(String.Format("Sayfalama: Sayfadaki Toplam Ürün {0}, Sayfa Sayısı {1}", products.Count, pageNumber));
+                    else
+                    {
+                        result.exeptionMessage.Add(String.Format(
+                            "Maksimum sayfa genişliği {0} olmalıdır. {1} miktarı geçersiz olduğundan sayfada {2} ürün gösterilecektir."
+                            , result.totalEntityCount, pageSize, result.totalEntityCount));
+                        pageSize = result.totalEntityCount;
+                    }
                 }
+
+                result.totalPageCount = (int)Math.Ceiling(result.totalEntityCount / (double)pageSize);
+
+                if (pageNumber > result.totalPageCount || pageNumber < 1)
+                {
+                    if (pageNumber < 1)
+                    {
+                        result.exeptionMessage.Add(String.Format(
+                            "{0} sayfa numarası geçersiz olduğundan ilk sayfa gösterilecektir", pageNumber));
+                        pageNumber = 1;
+                    }
+                    else
+                    {
+                        result.exeptionMessage.Add(String.Format(
+                            "Toplam sayfa sayısı {0}. {1} nolu sayfa olmadığından son sayfa gösterilecektir",
+                            result.totalPageCount, pageNumber));
+                        pageNumber = result.totalPageCount;
+                    }
+                }
+                result.pageNumber = pageNumber;
+                products = products.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+                List<ListProductModel> productList = _mapper.Map<List<TalhaMarket.DB.Entities.Product>, List<ListProductModel>>(products);
+                result.entities = productList;
+                result.operations.Add(String.Format("Sayfalama: Sayfadaki Toplam Ürün {0}, Sayfa Sayısı {1}", products.Count, pageNumber));
+
             }
             if (result.entities.Count > 0)
             {

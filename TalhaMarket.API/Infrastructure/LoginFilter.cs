@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Caching.Memory;
 using System;
+using TalhaMarket.API.Services.CurrentUser;
 using TalhaMarket.Model.Users;
-using TalhaMarket.Service.CurrentUser;
 
 namespace TalhaMarket.API.Infrastructure
 {

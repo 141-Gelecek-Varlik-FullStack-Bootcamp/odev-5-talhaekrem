@@ -9,8 +9,8 @@ namespace TalhaMarket.Service.User
 
         General<UserModel> GetAll();
         General<UserDetailModel> GetUser(int id);
-        General<UserDetailModel> Insert(UserModel newUser);
-        General<UserDetailModel> Update(int id, UpdateUserModel updateUser);
+        General<UserDetailModel> Insert(UpdateUserModel newUser);
+        General<UserDetailModel> Update(UpdateUserModel updateUser);
         General<bool> Delete(int id);
     }
 }

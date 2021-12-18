@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TalhaMarket.API.Infrastructure;
+using TalhaMarket.API.Services.CurrentUser;
 using TalhaMarket.Model;
 using TalhaMarket.Model.Users;
-using TalhaMarket.Service.CurrentUser;
 using TalhaMarket.Service.User;
 
 namespace TalhaMarket.API.Controllers
@@ -18,13 +13,11 @@ namespace TalhaMarket.API.Controllers
     {
         private readonly IMemoryCache _memoryCache;
         private readonly IUserService _userService;
-        private readonly ICurrentUserService _currentUser;
         public LoginController(IMemoryCache memoryCache,
-            IUserService userService, ICurrentUserService currentUserService)
+            IUserService userService)
         {
             _memoryCache = memoryCache;
             _userService = userService;
-            _currentUser = currentUserService;
         }
 
         [HttpPost]
