@@ -1,0 +1,76 @@
+﻿@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Kayıt Ol";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <main>
+            <div class="container mainArea">
+                <div class="row justify-content-center align-items-center min-vh-100">
+                    @if (Model.Errors is not null)
+                    {
+                    <div class="alert alert-warning" role="alert">
+                        @foreach (var err in Model.Errors)
+                        {
+                            @err<br />
+                        }
+                    </div>
+                    }
+                    <div class="col-lg-7">
+                        <div class="card shadow-lg border-0 rounded-lg">
+                            <div class="card-header"><h3 class="text-center font-weight-light my-4">Hesap Oluştur</h3></div>
+                            <div class="card-body">
+                                <form asp-controller="Account" asp-action="Register" method="post" role="form">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input asp-for="Name" class="form-control" id="Name" type="text" placeholder="İsim" />
+                                                <label for="userName">İsim</label>
+                                                <span asp-validation-for="Name"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input asp-for="SurName" class="form-control" id="SurName" type="text" placeholder="Soy İsim" />
+                                                <label for="userName">Soy İsim</label>
+                                                <span asp-validation-for="SurName"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="UserName" class="form-control" id="UserName" type="text" placeholder="Kullanıcı adı" />
+                                        <label for="userName">Kullanıcı Adı</label>
+                                        <span asp-validation-for="UserName"></span>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="Email" class="form-control" id="inputEmail" type="email" placeholder="name@example.com" />
+                                        <label for="inputEmail">E-posta Adresi</label>
+                                        <span asp-validation-for="Email"></span>
+                                    </div>
+                                    <div class="form-floating mb-3">
+                                        <input asp-for="Password" class="form-control" id="inputPassword" type="password" placeholder="Şifre oluştur" />
+                                        <label for="inputPassword">Şifre</label>
+                                        <span asp-validation-for="Password"></span>
+                                    </div>
+                                    <div class="mt-4 mb-0">
+                                        <div class="d-grid"><input type="submit" value="Hesap Oluştur" class="btn btn-primary btn-block" /></div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-footer text-center py-3">
+                                <div class="small"><a asp-controller="Account" asp-action="Login">Hesabın var mı? Giriş yap</a></div>
+                            </div>
+                            <div class="card-footer text-center py-3">
+                                <div><a class="text-secondary goHomeLink" asp-controller="Home" asp-action="Index"><i class="fas fa-long-arrow-alt-left"></i> Ana Sayfa</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Title"] = "Giriş Yap";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+@model LoginViewModel
+<div id="layoutAuthentication">
+    <div id="layoutAuthentication_content">
+        <div class="container mainArea">
+            <div class="row justify-content-center align-items-center min-vh-100">
+                @if (TempData["errorLogin"] != null)
+                {
+                    <div class="alert alert-warning" role="alert">
+                        @TempData["errorLogin"]
+                    </div>
+                }
+                <div class="col-lg-5">
+                    <div class="card shadow-lg border-0 rounded-lg ">
+                        <div class="card-header"><h3 class="text-center font-weight-light my-4">Giriş Yap</h3></div>
+                        <div class="card-body">
+                            <form asp-controller="Account" asp-action="Login" method="post" role="form">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="userName" class="form-control" id="userName" type="text" placeholder="Kullanıcı Adı" />
+                                    <label for="userName">Kullanıcı Adı</label>
+                                    <span asp-validation-for="userName"></span>
+                                </div>
+                                <div class="form-floating mb-3">
+                                    <input asp-for="password" class="form-control" id="inputPassword" type="password" placeholder="Şifre" />
+                                    <label for="inputPassword">Şifre</label>
+                                    <span asp-validation-for="password"></span>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input asp-for="rememberMe" class="form-check-input" id="inputRememberPassword" type="checkbox" />
+                                    <label class="form-check-label" for="inputRememberPassword">Şifremi Hatırla</label>
+                                </div>
+                                <div class="d-flex align-items-center justify-content-center mt-4 mb-0">
+                                    <input type="submit" class="btn btn-primary" value="Giriş Yap" />
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer text-center py-3">
+                            <div class="small"><a asp-controller="Account" asp-action="Register">Hesabın yok mu? Kayıt ol!</a></div>
+                        </div>
+                        <div class="card-footer text-center py-3">
+                            <div><a class="text-secondary goHomeLink" asp-controller="Home" asp-action="Index"><i class="fas fa-long-arrow-alt-left"></i> Ana Sayfa</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

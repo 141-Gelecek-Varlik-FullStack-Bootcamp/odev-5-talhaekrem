@@ -14,6 +14,7 @@ namespace TalhaMarket.DB.Entities
         }
 
         public int Id { get; set; }
+        public string AspNetUserId { get; set; }
         public string Name { get; set; }
         public string SurName { get; set; }
         public string UserName { get; set; }
@@ -24,6 +25,7 @@ namespace TalhaMarket.DB.Entities
         public DateTime InsertDate { get; set; }
         public DateTime? UpdateDate { get; set; }
 
+        public virtual AspNetUsers AspNetUser { get; set; }
         public virtual ICollection<Category> Category { get; set; }
         public virtual ICollection<Product> Product { get; set; }
     }

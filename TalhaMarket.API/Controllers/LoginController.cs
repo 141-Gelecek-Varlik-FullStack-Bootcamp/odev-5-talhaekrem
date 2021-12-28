@@ -21,7 +21,7 @@ namespace TalhaMarket.API.Controllers
         }
 
         [HttpPost]
-        [Route("[controller]")]
+        [Route("api/[controller]")]
         public General<bool> Login([FromBody] LoginModel loginUser)
         {
             General<bool> resp = new();

@@ -12,7 +12,7 @@ using TalhaMarket.Service.Category;
 
 namespace TalhaMarket.API.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class CategoriesController : ControllerBase
     {

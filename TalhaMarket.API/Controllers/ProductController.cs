@@ -7,7 +7,7 @@ using TalhaMarket.Service.Product;
 
 namespace TalhaMarket.API.Controllers
 {
-    [Route("[controller]s")]
+    [Route("api/[controller]s")]
     [ApiController]
     public class ProductController : ControllerBase
     {

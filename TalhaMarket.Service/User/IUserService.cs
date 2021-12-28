@@ -12,5 +12,6 @@ namespace TalhaMarket.Service.User
         General<UserDetailModel> Insert(UpdateUserModel newUser);
         General<UserDetailModel> Update(UpdateUserModel updateUser);
         General<bool> Delete(int id);
+        int CurrentUserId(string AspNetUserId);
     }
 }

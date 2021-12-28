@@ -70,7 +70,6 @@ namespace TalhaMarket.Service.Product
             using (var _context = new TalhaMarketContext())
             {
                 model.InsertDate = DateTime.Now;
-                model.InsertedUser = newProduct.InsertedUser;
                 _context.Product.Add(model);
                 _context.SaveChanges();
                 result.Entity = _mapper.Map<ProductDetailModel>(model);
@@ -96,17 +95,13 @@ namespace TalhaMarket.Service.Product
             var model = _mapper.Map<TalhaMarket.DB.Entities.Product>(updateProduct);
             using (var _context = new TalhaMarketContext())
             {
-                var product = _context.Product.SingleOrDefault(u => u.Id == updateProduct.Id);
-                product.CategoryId = model.CategoryId;
-                product.Name = model.Name;
-                product.DisplayName = model.DisplayName;
-                product.Description = model.Description;
-                product.Price = model.Price;
-                product.Stock = model.Stock;
-                product.IsActive = model.IsActive;
-                product.IsDeleted = model.IsDeleted;
-                product.UpdateDate = DateTime.Now;
-                product.UpdatedUser = updateProduct.UpdatedUser;
+                var product = _context.Product.FirstOrDefault(p=> p.Id == updateProduct.Id);
+                //modelden insertuser ve insertdate gelmediği için 0 olarak görüyor ve böyle kaydetmeye çalışıyor. onu engellemek için önceki değerleri veriyorum.
+                model.InsertedUser = product.InsertedUser;
+                model.InsertDate = product.InsertDate;
+                model.UpdateDate = DateTime.Now;
+
+                _context.Entry(product).CurrentValues.SetValues(model);
                 _context.SaveChanges();
                 result.isSuccess = true;
                 result.Entity = _mapper.Map<ProductDetailModel>(product);

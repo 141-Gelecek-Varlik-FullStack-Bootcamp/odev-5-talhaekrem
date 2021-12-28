@@ -92,12 +92,11 @@ namespace TalhaMarket.Service.Category
             using (var _context = new TalhaMarketContext())
             {
                 var category = _context.Category.SingleOrDefault(u => u.Id == updateCategory.Id);
-                category.Name = model.Name;
-                category.DisplayName = model.DisplayName;
-                category.IsActive = model.IsActive;
-                category.IsDeleted = model.IsDeleted;
-                category.UpdateDate = DateTime.Now;
-                category.UpdatedUser = updateCategory.UpdatedUser;
+
+                model.InsertedUser = category.InsertedUser;
+                model.InsertDate = category.InsertDate;
+                model.UpdateDate = DateTime.Now;
+                _context.Entry(category).CurrentValues.SetValues(model);
                 _context.SaveChanges();
                 result.isSuccess = true;
                 result.Entity = _mapper.Map<CategoryDetailModel>(category);

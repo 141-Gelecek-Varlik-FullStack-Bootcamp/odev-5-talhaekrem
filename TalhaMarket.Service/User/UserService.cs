@@ -164,5 +164,14 @@ namespace TalhaMarket.Service.User
             }
             return result;
         }
+
+        public int CurrentUserId(string AspNetUserId)
+        {
+            using (var _context = new TalhaMarketContext())
+            {
+                int userId = _context.User.FirstOrDefault(u => u.AspNetUserId == AspNetUserId).Id;
+                return userId;
+            }
+        }
     }
 }
