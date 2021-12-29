@@ -35,11 +35,6 @@ namespace TalhaMarket.Admin.Controllers
             return View(model);
         }
 
-        [Authorize]
-        public IActionResult Privacy()
-        {
-            return View();
-        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
@@ -48,43 +43,3 @@ namespace TalhaMarket.Admin.Controllers
         }
     }
 }
-
-//using (var client = new HttpClient())
-//{
-//    //try
-//    //{
-//    //    HttpResponseMessage resp = await client.GetAsync("https://localhost:44336/Products");
-//    //    resp.EnsureSuccessStatusCode();
-//    //    string responseBody = await resp.Content.ReadAsStringAsync();
-//    //    HomeAdminViewModel model = new()
-//    //    {
-//    //        test = responseBody
-//    //    };
-//    //    return View(model);
-//    //}
-//    //catch (HttpRequestException e)
-//    //{
-//    //    TempData["ErrorMessage"] = $"Bir hata oluştu.\n {e.Message}";
-//    //}
-//    //client.BaseAddress = new Uri("http://localhost:64189/");
-//    ////HTTP GET
-//    //var responseTask = client.GetAsync("Products");
-//    //responseTask.Wait();
-
-//    //var result = responseTask.Result;
-
-//    //if (result.IsSuccessStatusCode)
-//    //{
-//    //    var readTask = result.Content.ReadAsStringAsync<HomeAdminViewModel>();
-//    //    readTask.Wait();
-
-//    //    products = readTask.Result;
-//    //}
-//    //else
-//    //{
-//    //    products = Enumerable.Empty<HomeAdminViewModel>();
-
-//    //    ModelState.AddModelError(string.Empty, "Server error. Please contact administrator.");
-
-//    //}
-//}

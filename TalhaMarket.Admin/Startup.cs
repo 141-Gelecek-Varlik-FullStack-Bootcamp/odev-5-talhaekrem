@@ -51,7 +51,7 @@ namespace TalhaMarket.Admin
             services.AddDbContext<CustomIdentityDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<CustomIdentityUser, CustomIdentityRole>().AddEntityFrameworkStores<CustomIdentityDbContext>().AddDefaultTokenProviders();
 
-            //hangfire
+            //hangfire kurulumu için gerekli veritabaný baðlantýlarýný yapýyorum. ayrý bir databasede de tutulabilir.
             services.AddHangfire(x => x.UseSqlServerStorage("Server=TALHAEKREM;Database=TalhaMarket;Trusted_Connection=True;MultipleActiveResultSets=true"));
             services.AddHangfireServer();
         }
@@ -82,7 +82,8 @@ namespace TalhaMarket.Admin
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
-            app.UseHangfireDashboard();
+            //hangfire arayüzü. /hangfire ile giriþ yapabilirsiniz.
+            //app.UseHangfireDashboard();
 
 
         }

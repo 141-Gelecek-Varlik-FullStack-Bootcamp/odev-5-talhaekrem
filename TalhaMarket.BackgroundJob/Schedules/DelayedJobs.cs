@@ -9,6 +9,7 @@ namespace TalhaMarket.BackgroundJob.Schedules
 {
     public static class DelayedJobs
     {
+        [Obsolete]
         public static void SendWelcomeMailJob(int userId)
         {
             Hangfire.BackgroundJob.Schedule<UserWelcomeMailManager>(

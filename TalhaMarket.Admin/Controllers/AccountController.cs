@@ -44,6 +44,7 @@ namespace TalhaMarket.Admin.Controllers
         //submit dediği an post işlemi gerçekleşecek ve kayıt için bilgiler buraya gelecektir. 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Obsolete]
         public IActionResult Register(RegisterViewModel model)
         {
             //modelin içerisine data annotationslara göre doğru veriler girilmişse devam et
@@ -135,6 +136,7 @@ namespace TalhaMarket.Admin.Controllers
             return View();
         }
 
+        //identity kütüphanesini kullanarak login işlemi
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Login(LoginViewModel model)
@@ -153,6 +155,7 @@ namespace TalhaMarket.Admin.Controllers
             return View(model);
         }
 
+        //oturumu kapat
         public ActionResult LogOff()
         {
             _signInManager.SignOutAsync().Wait();
