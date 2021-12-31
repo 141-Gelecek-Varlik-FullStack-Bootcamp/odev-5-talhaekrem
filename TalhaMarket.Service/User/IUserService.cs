@@ -9,7 +9,7 @@ namespace TalhaMarket.Service.User
 
         General<UserModel> GetAll();
         General<UserDetailModel> GetUser(int id);
-        General<UserDetailModel> Insert(UpdateUserModel newUser);
+        General<UserDetailModel> Insert(InsertUserModel newUser);
         General<UserDetailModel> Update(UpdateUserModel updateUser);
         General<bool> Delete(int id);
         int CurrentUserId(string AspNetUserId);

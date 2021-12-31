@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TalhaMarket.Admin", "TalhaM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TalhaMarket.Service", "TalhaMarket.Service\TalhaMarket.Service.csproj", "{6703784B-2DD5-4F49-971E-E8E61311FD80}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TalhaMarket.BackgroundJob", "TalhaMarket.BackgroundJob\TalhaMarket.BackgroundJob.csproj", "{338EFDE8-00AC-4FB7-B52D-902131B7EAF3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TalhaMarket.BackgroundJob", "TalhaMarket.BackgroundJob\TalhaMarket.BackgroundJob.csproj", "{338EFDE8-00AC-4FB7-B52D-902131B7EAF3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

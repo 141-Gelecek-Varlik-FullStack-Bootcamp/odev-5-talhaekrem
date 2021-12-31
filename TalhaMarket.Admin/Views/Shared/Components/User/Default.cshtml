@@ -4,8 +4,8 @@
     <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" id="userSettings" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user fa-fw"></i></a>
         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userSettings">
-            <li>Welcome @Model.UserName</li>
-            <li><a class="dropdown-item" href="#!">Settings</a></li>
+            <li class="dropdown-item">Hi, @Model.UserName</li>
+            <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Settings">Settings</a></li>
             <li><hr class="dropdown-divider" /></li>
             <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="LogOff">Logout</a></li>
         </ul>

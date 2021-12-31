@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Hesap Ayarları";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+@model UserSettingsViewModel
+
+<h1 class="display-4">Ayarlar</h1>
+<div class="card mb-4">
+    <div class="card-body">
+        <form asp-controller="Account" asp-action="Settings" method="post">
+            <div class="form-group">
+                <label asp-for="updateUser.Name">Ad</label>
+                <input asp-for="updateUser.Name" class="form-control" type="text" placeholder="Adınız" />
+                <span asp-validation-for="updateUser.Name"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="updateUser.SurName">Soyad</label>
+                <input asp-for="updateUser.SurName" class="form-control" type="text" placeholder="Soyadınız" />
+                <span asp-validation-for="updateUser.SurName"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="updateUser.UserName">Kullanıcı Adı</label>
+                <input asp-for="updateUser.UserName" class="form-control" type="text" placeholder="Kullanıcı Adınız" />
+                <span asp-validation-for="updateUser.UserName"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="updateUser.Email">E Posta</label>
+                <input asp-for="updateUser.Email" class="form-control" type="email" placeholder="E-Posta" />
+                <span asp-validation-for="updateUser.Email"></span>
+            </div>
+            <input type="hidden" asp-for="updateUser.Id" />
+            <input type="submit" value="Bilgilerimi Güncelle" class="btn btn-info" />
+        </form>
+
+        <a id="disableBtn" asp-area="" asp-controller="Account" asp-action="Disable" class="btn btn-danger btn-sm mt-4">Hesabımı devre dışı bırak</a>
+    </div>
+</div>
+<script>
+    document.querySelector("#disableBtn").addEventListener("click", function (e){
+        if (!confirm("Hesabınızı devre dışı bırakmak istediğinizden emin misiniz?")) e.preventDefault();
+    },false)
+</script>

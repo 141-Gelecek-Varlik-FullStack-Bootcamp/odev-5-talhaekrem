@@ -54,7 +54,7 @@ namespace TalhaMarket.Admin.Controllers
                 CustomIdentityUser user = new()
                 {
                     UserName = model.UserName,
-                    Email = model.Email,
+                    Email = model.Email
                 };
 
 
@@ -110,7 +110,7 @@ namespace TalhaMarket.Admin.Controllers
                     //ayrıyetten user tablosuna da kullanıcıyı ekleme. User tablosunu AspNetUser tablosune göre daha yalın,sade ve daha fazla bilgi tuttuğundan kullanıyorum.
                     //insert user değeri yine User tablosunun idsinden gelecek
                     //current user, logged user ise AspNetUser tablosundan gelecektir. hazır yapı mevcut.
-                    var userModel = _mapper.Map<UpdateUserModel>(model);
+                    var userModel = _mapper.Map<InsertUserModel>(model);
                     userModel.AspNetUserId = user.Id;
                     var registereduser = _userService.Insert(userModel);
 
@@ -156,10 +156,52 @@ namespace TalhaMarket.Admin.Controllers
         }
 
         //oturumu kapat
-        public ActionResult LogOff()
+        public IActionResult LogOff()
         {
             _signInManager.SignOutAsync().Wait();
             return RedirectToAction("Login","Account");
+        }
+
+        public IActionResult Settings()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = _userService.GetUser(_userService.CurrentUserId(userId));
+            var updateModel = _mapper.Map<UpdateUserModel>(user.Entity);
+            UserSettingsViewModel model = new()
+            {
+                updateUser = updateModel
+            };
+            return View(model);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Settings(UserSettingsViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                //önce aspnet identity tablosundan güncelliyorum sonra users tablosundan
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var user = await _userManager.FindByIdAsync(userId);
+                user.Email = model.updateUser.Email;
+                user.UserName = model.updateUser.UserName;
+                await _userManager.UpdateAsync(user);
+                _userService.Update(model.updateUser);
+                TempData.Add("adminmessage", "Bilgileriniz başarıyla güncellendi!");
+
+            }
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> Disable()
+        {
+            var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            int userId = _userService.CurrentUserId(id);
+            _userService.Delete(userId);
+
+            var user = _userManager.FindByNameAsync(HttpContext.User.Identity.Name);
+            await _userManager.SetLockoutEnabledAsync(user.Result, true);
+            await _userManager.SetLockoutEndDateAsync(user.Result, DateTime.Today.AddYears(100));
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Login", "Account");
         }
     }
 }

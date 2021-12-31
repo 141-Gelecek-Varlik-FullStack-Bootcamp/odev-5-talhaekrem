@@ -27,10 +27,9 @@ namespace TalhaMarket.Admin.Controllers
 
         public IActionResult Index()
         {
-            string userName = HttpContext.User.Identity.Name;
             HomeViewModel model = new()
             {
-                name = _userService.GetAll().EntityList.Where(u => u.UserName == userName).FirstOrDefault().Name
+                name = HttpContext.User.Identity.Name
             };
             return View(model);
         }

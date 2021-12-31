@@ -15,9 +15,11 @@ namespace TalhaMarket.Admin.Infrastructure
     {
         public Mapping()
         {
-            CreateMap<RegisterViewModel, UpdateUserModel>();
+            CreateMap<RegisterViewModel, InsertUserModel>();
             CreateMap<ProductDetailModel, UpdateProductModel>();
             CreateMap<CategoryDetailModel, UpdateCategoryModel>();
+            CreateMap<UserDetailModel, InsertUserModel>();
+            CreateMap<UserDetailModel, UpdateUserModel>();
         }
     }
 }

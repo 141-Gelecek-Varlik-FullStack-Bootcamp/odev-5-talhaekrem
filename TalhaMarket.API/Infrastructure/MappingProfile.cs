@@ -20,6 +20,8 @@ namespace TalhaMarket.API.Infrastructure
             CreateMap<User, UserDetailModel>();
             CreateMap<UserModel, User>();
             CreateMap<User, UserModel>();
+            CreateMap<InsertUserModel, User>();
+            CreateMap<User, InsertUserModel>();
             CreateMap<UpdateUserModel, User>();
             CreateMap<User, UpdateUserModel>();
             //product

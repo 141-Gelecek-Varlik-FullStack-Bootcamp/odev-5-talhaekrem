@@ -40,17 +40,18 @@ namespace TalhaMarket.API.Controllers
         }
 
         [HttpPost]
-        public General<UserDetailModel> InsertUpdateUser([FromBody] UpdateUserModel user)
+        public General<UserDetailModel> InsertUser([FromBody] InsertUserModel user)
         {
             General<UserDetailModel> response = new();
-            if(user is { Id: > 0 })
-            {
-                response = _userService.Update(user);
-            }
-            else
-            {
-                response = _userService.Insert(user);
-            }
+            response = _userService.Insert(user);
+
+            return response;
+        }
+        [HttpPut]
+        public General<UserDetailModel> UpdateUser([FromBody] UpdateUserModel user)
+        {
+            General<UserDetailModel> response = new();
+            response = _userService.Update(user);
             return response;
         }
 

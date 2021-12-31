@@ -84,7 +84,7 @@ namespace TalhaMarket.Service.User
         }
 
         //kullanıcı kayıt olma
-        public General<UserDetailModel> Insert(UpdateUserModel newUser)
+        public General<UserDetailModel> Insert(InsertUserModel newUser)
         {
             var result = new General<UserDetailModel>() { isSuccess = false };
 
@@ -116,15 +116,15 @@ namespace TalhaMarket.Service.User
             var model = _mapper.Map<TalhaMarket.DB.Entities.User>(updateUser);
             using (var _context = new TalhaMarketContext())
             {
-                var user = _context.User.SingleOrDefault(u => u.Id == updateUser.Id);
-                user.Name = model.Name;
-                user.SurName = model.SurName;
-                user.UserName = model.UserName;
-                user.Email = model.Email;
-                user.Password = model.Password;
-                user.UpdateDate = DateTime.Now;
-                user.IsActive = model.IsActive;
-                user.IsDeleted = model.IsDeleted;
+                var user = _context.User.FirstOrDefault(u => u.Id == updateUser.Id);
+
+                //maplediğimizde boş kalan(değiştirmek istemediğim) alanları dbdeki verilere eşitliyorum.
+                model.InsertDate = user.InsertDate;
+                model.Password = user.Password;
+                model.UpdateDate = DateTime.Now;
+                model.AspNetUserId = user.AspNetUserId;
+                model.IsActive = true;
+                _context.Entry(user).CurrentValues.SetValues(model);
                 _context.SaveChanges();
                 result.isSuccess = true;
                 result.Entity = _mapper.Map<UserDetailModel>(user);
